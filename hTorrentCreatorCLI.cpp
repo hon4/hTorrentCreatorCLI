@@ -54,6 +54,7 @@ int main(int argc, char *argv[]){
 
 int mkTorrent(){
 	map<string, any> dict;
+	return 0;
 }
 
 void show_help(){
