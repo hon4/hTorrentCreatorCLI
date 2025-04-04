@@ -3,6 +3,7 @@
 #include <map>
 #include <any>
 #include <vector>
+#include <fstream>
 
 #include "inc/honSHA1.h"
 #include "inc/BEncode/BEncode.h"
@@ -13,7 +14,8 @@ string hTorrentCreatorCLI_ver = "0.0.1";
 
 void show_help();
 void show_ver();
-int mkTorrent();
+int mkTorrent(const std::string& input_path);
+std::string PieceHashFile(const std::string& filePath, const int& piece_size);
 
 int main(int argc, char *argv[]){
 	//BEncode BEncode;
@@ -47,14 +49,42 @@ int main(int argc, char *argv[]){
 		}
 	}
 
-	mkTorrent();
+	mkTorrent(input_path);
 	
 	return 0;
 }
 
-int mkTorrent(){
+int mkTorrent(const std::string& input_path){
 	map<string, any> dict;
-	return 0;
+    PieceHashFile(input_path, 8);
+    return 0;
+}
+
+std::string PieceHashFile(const std::string& filePath, const int& piece_size){
+    std::string ret;
+
+    std::ifstream file(filePath);
+    if (!file.is_open()) {
+        std::cerr << "Failed to open file: " << filePath << std::endl;
+        return 0; // error
+    }
+
+    char buffer[piece_size + 1]; // +1 for null terminator
+    while (file.read(buffer, piece_size)) {
+        buffer[piece_size] = '\0'; // Ensure null termination
+        std::string chunk(buffer);
+
+        std::cout << "Chunk: " << chunk << " - "<< honSHA1(chunk) << std::endl;
+    }
+
+    if (file.gcount() > 0) {
+        buffer[file.gcount()] = '\0'; // Null terminate the last chunk
+        std::string lastChunk(buffer);
+
+        std::cout << "Last Chunk: " << lastChunk <<  std::endl;
+    }
+
+    file.close();
 }
 
 void show_help(){
