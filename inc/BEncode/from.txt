@@ -1,0 +1,1 @@
+Taken from: https://github.com/hon4/cpp-BEncode-BDecode
