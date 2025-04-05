@@ -1,6 +1,6 @@
 CC = gcc
 SRC = src/hTorrentCreatorCLI.cpp
-OUTPUT = htorrentcreatorcli
+OUTPUT = htc
 
 all: $(OUTPUT)
 
