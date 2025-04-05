@@ -11,6 +11,7 @@
 #include "inc/GetFileName.h"
 #include "inc/GetFileSize.h"
 #include "inc/UnixTimestamp.h"
+#include "inc/WriteFile.h"
 using namespace std;
 
 string hTorrentCreatorCLI_ver = "0.0.1";
@@ -67,8 +68,9 @@ int mkTorrent(const std::string& input_path, const bool& priv){
 	int piece_size = 16384;
 
 	map<string, any> info_dict;
+	string fname=GetFileName(input_path);
 	info_dict["length"]=GetFileSize(input_path);
-	info_dict["name"]=GetFileName(input_path);
+	info_dict["name"]=fname;
 	info_dict["piece length"]=piece_size;
 	info_dict["pieces"]=PieceHashFile(input_path, piece_size);
 	if (priv) {
@@ -78,7 +80,8 @@ int mkTorrent(const std::string& input_path, const bool& priv){
 	dict["info"]=std::any(info_dict);
 
 	BEncode BEnc;
-    cout << BEnc.Encode(dict) << endl;
+	WriteFile(fname+".torrent",BEnc.Encode(dict));
+	cout << "aa" << endl;
     return 0;
 }
 
