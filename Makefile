@@ -1,6 +1,7 @@
 CC = gcc
 SRC = src/hTorrentCreatorCLI.cpp
 OUTPUT = htc
+BINDIR ?= /usr/local/bin
 
 all: $(OUTPUT)
 
@@ -12,3 +13,10 @@ clean:
 
 run: $(OUTPUT)
 	./$(OUTPUT)
+
+install: $(OUTPUT)
+	mkdir -p $(BINDIR)
+	cp htc $(BINDIR)
+
+uninstall: $(OUTPUT)
+	rm -f $(BINDIR)/htc
