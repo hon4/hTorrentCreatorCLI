@@ -95,8 +95,8 @@ int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_
 	}
 
 	WriteFile(out_path,BEnc.Encode(dict));
-	cout << "aa" << endl;
-    return 0;
+	cout << "Torrent File successfully created." << endl;
+	return 0;
 }
 
 std::string PieceHashFile(const std::string& filename, const int& piece_size) {
