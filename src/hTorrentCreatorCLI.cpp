@@ -18,7 +18,7 @@ string hTorrentCreatorCLI_ver = "0.0.1";
 
 void show_help();
 void show_ver();
-int mkTorrent(const std::string& input_path, const bool& priv);
+int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path);
 std::string PieceHashFile(const std::string& filename, const int& piece_size);
 
 int main(int argc, char *argv[]){
@@ -35,6 +35,7 @@ int main(int argc, char *argv[]){
 
 	string input_path;
 	bool priv=false;
+	string out_path;
 
 	for(int i=1; i<argc; i++){
 		if(!strcmp(argv[i],"-h")){
@@ -53,15 +54,23 @@ int main(int argc, char *argv[]){
 			}
 		}else if(!strcmp(argv[i],"-p")){
 			priv=true;
-		}
+		}else if(!strcmp(argv[i],"-o")){
+                        i++;
+                        if(argc>i){
+                                out_path = argv[i];
+                        }else{
+                                printf("hTorrentCreatorCLI: Error: -o is used but no output file specified.\n");
+                                return 0;
+                        }
+                }
 	}
 
-	mkTorrent(input_path, priv);
+	mkTorrent(input_path, priv, out_path);
 	
 	return 0;
 }
 
-int mkTorrent(const std::string& input_path, const bool& priv){
+int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path){
 	map<string, any> dict;
 	dict["created by"]="hTorrentCreatorCLI "+hTorrentCreatorCLI_ver;
 	dict["creation date"]=GetUnixTimestamp();
@@ -80,7 +89,12 @@ int mkTorrent(const std::string& input_path, const bool& priv){
 	dict["info"]=std::any(info_dict);
 
 	BEncode BEnc;
-	WriteFile(fname+".torrent",BEnc.Encode(dict));
+
+	if (out_path.empty()) {
+		out_path=fname+".torrent";
+	}
+
+	WriteFile(out_path,BEnc.Encode(dict));
 	cout << "aa" << endl;
     return 0;
 }
@@ -106,7 +120,7 @@ std::string PieceHashFile(const std::string& filename, const int& piece_size) {
 
 
 void show_help(){
-	printf("\nhTorrentCreatorCLI %s\n==========================\n-v  Show version info and exit.\n-h  Show this menu and exit.\n-i  Select input path.\n-p  Set private flag to torrent.\n\n",hTorrentCreatorCLI_ver.c_str());
+	printf("\nhTorrentCreatorCLI %s\n==========================\n-v  Show version info and exit.\n-h  Show this menu and exit.\n-i  Select input path.\n-p  Set private flag to torrent.\n-o  Select output file.\n\n",hTorrentCreatorCLI_ver.c_str());
 }
 
 void show_ver(){
