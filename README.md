@@ -1,2 +1,2 @@
 # hTorrentCreatorCLI
-An independent command line torrent creator.
+A C++ command line torrent creator.
