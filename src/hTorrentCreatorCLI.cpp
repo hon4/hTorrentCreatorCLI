@@ -18,7 +18,7 @@ string hTorrentCreatorCLI_ver = "0.0.1";
 
 void show_help();
 void show_ver();
-int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path);
+int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path, const std::vector<std::string>& trackers);
 std::string PieceHashFile(const std::string& filename, const int& piece_size);
 
 int main(int argc, char *argv[]){
@@ -36,6 +36,7 @@ int main(int argc, char *argv[]){
 	string input_path;
 	bool priv=false;
 	string out_path;
+	vector<string> trackers;
 
 	for(int i=1; i<argc; i++){
 		if(!strcmp(argv[i],"-h")){
@@ -55,30 +56,44 @@ int main(int argc, char *argv[]){
 		}else if(!strcmp(argv[i],"-p")){
 			priv=true;
 		}else if(!strcmp(argv[i],"-o")){
-                        i++;
-                        if(argc>i){
-                                out_path = argv[i];
-                        }else{
-                                printf("hTorrentCreatorCLI: Error: -o is used but no output file specified.\n");
-                                return 0;
-                        }
-                }
+			i++;
+			if(argc>i){
+				out_path = argv[i];
+			}else{
+				printf("hTorrentCreatorCLI: Error: -o is used but no output file specified.\n");
+				return 0;
+			}
+		}else if(!strcmp(argv[i],"-t")){
+			i++;
+			if(argc>i){
+				trackers.push_back(argv[i]);
+			}else{
+				printf("hTorrentCreatorCLI: Error: -t is used but no tracker url specified.\n");
+				return 0;
+			}
+		}
 	}
 
-	mkTorrent(input_path, priv, out_path);
+	mkTorrent(input_path, priv, out_path, trackers);
 	
 	return 0;
 }
 
-int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path){
+int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path, const std::vector<std::string>& trackers){
 	map<string, any> dict;
-	dict["created by"]="hTorrentCreatorCLI "+hTorrentCreatorCLI_ver;
+	if(!trackers.empty()){
+		dict["announce"]=trackers[0];
+	}
+	dict["created by"]="hTorrentCLI "+hTorrentCreatorCLI_ver;
 	dict["creation date"]=GetUnixTimestamp();
 	int piece_size = 16384;
 
 	map<string, any> info_dict;
 	string fname=GetFileName(input_path);
-	info_dict["length"]=GetFileSize(input_path);
+
+	if(!isDIR(input_path)){
+		info_dict["length"]=GetFileSize(input_path);
+	}
 	info_dict["name"]=fname;
 	info_dict["piece length"]=piece_size;
 	info_dict["pieces"]=PieceHashFile(input_path, piece_size);
