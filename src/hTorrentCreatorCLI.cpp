@@ -81,9 +81,21 @@ int main(int argc, char *argv[]){
 
 int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path, const std::vector<std::string>& trackers){
 	map<string, any> dict;
+	//Announce
 	if(!trackers.empty()){
 		dict["announce"]=trackers[0];
 	}
+	//Announce list
+	if(trackers.size()>1){
+		vector<any> announce_list;
+		for (int i = 0; i < trackers.size(); i++) {
+			vector<any> tmp_trck_vctr{trackers[i]};
+			announce_list.push_back(tmp_trck_vctr);
+		}
+		dict["announce-list"]=announce_list;
+	}
+	
+
 	dict["created by"]="hTorrentCLI "+hTorrentCreatorCLI_ver;
 	dict["creation date"]=GetUnixTimestamp();
 	int piece_size = 16384;
