@@ -12,6 +12,7 @@
 #include "inc/GetFileSize.h"
 #include "inc/UnixTimestamp.h"
 #include "inc/WriteFile.h"
+#include "inc/GetPieceSize.h"
 using namespace std;
 
 string hTorrentCreatorCLI_ver = "0.0.1";
@@ -98,13 +99,14 @@ int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_
 
 	dict["created by"]="hTorrentCLI "+hTorrentCreatorCLI_ver;
 	dict["creation date"]=GetUnixTimestamp();
-	int piece_size = 16384;
+	long filesize = GetFileSize(input_path);
+	int piece_size = GetPieceSize(filesize);
 
 	map<string, any> info_dict;
 	string fname=GetFileName(input_path);
 
 	if(!isDIR(input_path)){
-		info_dict["length"]=GetFileSize(input_path);
+		info_dict["length"]=filesize;
 	}
 	info_dict["name"]=fname;
 	info_dict["piece length"]=piece_size;
