@@ -25,12 +25,6 @@ int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_
 std::string PieceHashFile(const std::string& filename, const int& piece_size, const long& filesize);
 
 int main(int argc, char *argv[]){
-	//BEncode BEncode;
-	//map<string, any> dict;
-	//string s="hello";
-	//dict["key"] = std::any(s);
-	//cout << BEncode.Encode(dict);
-
 	if(argc==1){
 		printf("hTorrentCreatorCLI: No command.\nType -h to show help.\n");
 		return 0;
