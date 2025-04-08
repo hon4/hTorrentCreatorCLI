@@ -13,6 +13,7 @@
 #include "inc/UnixTimestamp.h"
 #include "inc/WriteFile.h"
 #include "inc/GetPieceSize.h"
+#include "inc/StringSplit.h"
 using namespace std;
 
 string hTorrentCreatorCLI_ver = "0.0.1";
