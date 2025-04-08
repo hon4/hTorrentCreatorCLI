@@ -86,17 +86,17 @@ int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_
 	//Announce
 	if(!trackers.empty()){
 		dict["announce"]=StringSplit(trackers[0],'|')[0];
-	}
-	//Announce list
-	if(trackers.size()>1){
-		vector<any> announce_list;
-		for (int i=0; i < trackers.size(); i++) {
-			vector<any> tmp_trck_vctr=StringSplit(trackers[i],'|');
-			announce_list.push_back(tmp_trck_vctr);
+
+		//Announce list
+		if(trackers.size()>1||trackers[0].find('|') != string::npos){
+			vector<any> announce_list;
+			for (int i=0; i < trackers.size(); i++) {
+				vector<any> tmp_trck_vctr=StringSplit(trackers[i],'|');
+				announce_list.push_back(tmp_trck_vctr);
+			}
+			dict["announce-list"]=announce_list;
 		}
-		dict["announce-list"]=announce_list;
-	}
-	
+	}	
 
 	dict["created by"]="hTorrentCLI "+hTorrentCreatorCLI_ver;
 	dict["creation date"]=GetUnixTimestamp();
