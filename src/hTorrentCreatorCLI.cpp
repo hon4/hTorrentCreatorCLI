@@ -28,7 +28,7 @@ int main(int argc, char *argv[]){
 	//string s="hello";
 	//dict["key"] = std::any(s);
 	//cout << BEncode.Encode(dict);
-	
+
 	if(argc==1){
 		printf("hTorrentCreatorCLI: No command.\nType -h to show help.\n");
 		return 0;
@@ -149,7 +149,7 @@ std::string PieceHashFile(const std::string& filename, const int& piece_size) {
 
 
 void show_help(){
-	printf("\nhTorrentCreatorCLI %s\n==========================\n-v  Show version info and exit.\n-h  Show this menu and exit.\n-i  Select input path.\n-p  Set private flag to torrent.\n-o  Select output file.\n-t  Add tracker announce url. (can be used multiple times)\n\n",hTorrentCreatorCLI_ver.c_str());
+	printf("\nhTorrentCreatorCLI %s\n==========================\n-v         Show version info and exit.\n-h         Show this menu and exit.\n-i <path>  Select input path.\n-p         Set private flag to torrent.\n-o <path>  Select output file.\n-t <url>   Add tracker announce url. (can be used multiple times)\n\n",hTorrentCreatorCLI_ver.c_str());
 }
 
 void show_ver(){
