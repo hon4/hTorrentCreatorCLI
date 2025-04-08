@@ -149,7 +149,7 @@ std::string PieceHashFile(const std::string& filename, const int& piece_size) {
 
 
 void show_help(){
-	printf("\nhTorrentCreatorCLI %s\n==========================\n-v  Show version info and exit.\n-h  Show this menu and exit.\n-i  Select input path.\n-p  Set private flag to torrent.\n-o  Select output file.\n\n",hTorrentCreatorCLI_ver.c_str());
+	printf("\nhTorrentCreatorCLI %s\n==========================\n-v  Show version info and exit.\n-h  Show this menu and exit.\n-i  Select input path.\n-p  Set private flag to torrent.\n-o  Select output file.\n-t  Add tracker announce url. (can be used multiple times)\n\n",hTorrentCreatorCLI_ver.c_str());
 }
 
 void show_ver(){
