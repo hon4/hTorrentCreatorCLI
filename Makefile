@@ -1,6 +1,6 @@
 CC = gcc
 SRC = src/hTorrentCreatorCLI.cpp
-OUTPUT = htc
+OUTPUT = hTorrentCreator
 BINDIR ?= /usr/local/bin
 
 all: $(OUTPUT)
