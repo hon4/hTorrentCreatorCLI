@@ -96,7 +96,7 @@ int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_
 			}
 			dict["announce-list"]=announce_list;
 		}
-	}	
+	}
 
 	dict["created by"]="hTorrentCLI "+hTorrentCreatorCLI_ver;
 	dict["creation date"]=GetUnixTimestamp();
