@@ -14,6 +14,7 @@
 #include "inc/WriteFile.h"
 #include "inc/GetPieceSize.h"
 #include "inc/StringSplit.h"
+#include "inc/ProgressBar.h"
 using namespace std;
 
 string hTorrentCreatorCLI_ver = "0.0.1";
@@ -21,7 +22,7 @@ string hTorrentCreatorCLI_ver = "0.0.1";
 void show_help();
 void show_ver();
 int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path, const std::vector<std::string>& trackers);
-std::string PieceHashFile(const std::string& filename, const int& piece_size);
+std::string PieceHashFile(const std::string& filename, const int& piece_size, const long& filesize);
 
 int main(int argc, char *argv[]){
 	//BEncode BEncode;
@@ -82,6 +83,19 @@ int main(int argc, char *argv[]){
 }
 
 int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path, const std::vector<std::string>& trackers){
+	if(input_path.empty()){
+		std::cout << "hTorrentCreatorCLI: No input file specified.\n";
+		return 0;
+	}else{
+		std::ifstream file(input_path);
+		if(file.is_open()){
+			file.close();
+		}else{
+			std::cout << "hTorrentCreatorCLI: Input file/directory does not exist.\n";
+			return 0;
+		}
+	}
+	
 	map<string, any> dict;
 	//Announce
 	if(!trackers.empty()){
@@ -111,8 +125,8 @@ int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_
 	}
 	info_dict["name"]=fname;
 	info_dict["piece length"]=piece_size;
-	info_dict["pieces"]=PieceHashFile(input_path, piece_size);
-	if (priv) {
+	info_dict["pieces"]=PieceHashFile(input_path, piece_size, filesize);
+	if(priv){
 		info_dict["private"]=1;
 	}
 
@@ -120,16 +134,16 @@ int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_
 
 	BEncode BEnc;
 
-	if (out_path.empty()) {
+	if(out_path.empty()){
 		out_path=fname+".torrent";
 	}
 
 	WriteFile(out_path,BEnc.Encode(dict));
-	cout << "Torrent File successfully created." << endl;
+	cout << endl << "Torrent File successfully created." << endl;
 	return 0;
 }
 
-std::string PieceHashFile(const std::string& filename, const int& piece_size) {
+std::string PieceHashFile(const std::string& filename, const int& piece_size, const long& filesize) {
     std::string ret;
     std::ifstream file(filename, std::ios::binary);
     if (!file) {
@@ -137,11 +151,14 @@ std::string PieceHashFile(const std::string& filename, const int& piece_size) {
         return ret;
     }
 
+	long total_hashed = 0;
     std::string buffer(piece_size, '\0');
     while (file.read(&buffer[0], piece_size) || file.gcount() > 0) {
         buffer.resize(file.gcount());
+		total_hashed += file.gcount();
         ret += honSHA1(buffer);
         buffer.resize(piece_size);
+		ShowProgressBar(const_cast<long&>(filesize), total_hashed);
     }
     
     file.close();
