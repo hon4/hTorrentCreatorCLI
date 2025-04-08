@@ -85,13 +85,13 @@ int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_
 	map<string, any> dict;
 	//Announce
 	if(!trackers.empty()){
-		dict["announce"]=trackers[0];
+		dict["announce"]=StringSplit(trackers[0],'|')[0];
 	}
 	//Announce list
 	if(trackers.size()>1){
 		vector<any> announce_list;
-		for (int i = 0; i < trackers.size(); i++) {
-			vector<any> tmp_trck_vctr{trackers[i]};
+		for (int i=0; i < trackers.size(); i++) {
+			vector<any> tmp_trck_vctr=StringSplit(trackers[i],'|');
 			announce_list.push_back(tmp_trck_vctr);
 		}
 		dict["announce-list"]=announce_list;
