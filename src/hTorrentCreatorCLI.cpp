@@ -181,7 +181,7 @@ std::string PieceHashFile(const std::string& filename, const int& piece_size, co
 
 
 void show_help(){
-	printf("\nhTorrentCreatorCLI %s\n==========================\n-v         Show version info and exit.\n-h         Show this menu and exit.\n-i <path>  Select input path.\n-p         Set private flag to torrent.\n-o <path>  Select output file.\n-t <url>   Add tracker announce url. (can be used multiple times)\n\n",hTorrentCreatorCLI_ver.c_str());
+	printf("\nhTorrentCreatorCLI %s\n==========================\n-v         Show version info and exit.\n-h         Show this menu and exit.\n-i <path>  Select input path.\n-p         Set private flag to torrent.\n-o <path>  Select output file.\n-t <url>   Add tracker announce url. (can be used multiple times)\n-s <size>  Set piece size in bytes. (calculated automatically if unset)\n\n",hTorrentCreatorCLI_ver.c_str());
 }
 
 void show_ver(){
