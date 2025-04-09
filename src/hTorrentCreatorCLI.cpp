@@ -21,7 +21,7 @@ string hTorrentCreatorCLI_ver = "0.0.1";
 
 void show_help();
 void show_ver();
-int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path, const std::vector<std::string>& trackers);
+int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path, const std::vector<std::string>& trackers, const int& piece_size_user);
 std::string PieceHashFile(const std::string& filename, const int& piece_size, const long& filesize);
 
 int main(int argc, char *argv[]){
@@ -34,6 +34,7 @@ int main(int argc, char *argv[]){
 	bool priv=false;
 	string out_path;
 	vector<string> trackers;
+	int piece_size;
 
 	for(int i=1; i<argc; i++){
 		if(!strcmp(argv[i],"-h")){
@@ -68,15 +69,27 @@ int main(int argc, char *argv[]){
 				printf("hTorrentCreatorCLI: Error: -t is used but no tracker url specified.\n");
 				return 0;
 			}
+		}else if(!strcmp(argv[i],"-s")){
+			i++;
+			if(argc>i){
+				piece_size = atoi(argv[i]);
+				if(piece_size<16384||piece_size>16777216){
+					printf("hTorrentCreatorCLI: Error: -s The piece size must be greater than 16384 and less than 16777216.\n");
+					return 0;
+				}
+			}else{
+				printf("hTorrentCreatorCLI: Error: -s is used but no piece size specified.\n");
+				return 0;
+			}
 		}
 	}
 
-	mkTorrent(input_path, priv, out_path, trackers);
+	mkTorrent(input_path, priv, out_path, trackers, piece_size);
 	
 	return 0;
 }
 
-int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path, const std::vector<std::string>& trackers){
+int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path, const std::vector<std::string>& trackers, const int& piece_size_user){
 	if(input_path.empty()){
 		std::cout << "hTorrentCreatorCLI: No input file specified.\n";
 		return 0;
@@ -109,7 +122,12 @@ int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_
 	dict["created by"]="hTorrentCLI "+hTorrentCreatorCLI_ver;
 	dict["creation date"]=GetUnixTimestamp();
 	long filesize = GetFileSize(input_path);
-	int piece_size = GetPieceSize(filesize);
+	int piece_size;
+	if(piece_size_user==0){
+		piece_size = GetPieceSize(filesize);
+	}else{
+		piece_size = piece_size_user;
+	}
 
 	map<string, any> info_dict;
 	string fname=GetFileName(input_path);
