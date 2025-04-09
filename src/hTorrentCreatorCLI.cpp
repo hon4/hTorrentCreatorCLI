@@ -89,7 +89,7 @@ int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_
 			return 0;
 		}
 	}
-	
+
 	map<string, any> dict;
 	//Announce
 	if(!trackers.empty()){
@@ -140,10 +140,12 @@ int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_
 std::string PieceHashFile(const std::string& filename, const int& piece_size, const long& filesize) {
     std::string ret;
     std::ifstream file(filename, std::ios::binary);
-    if (!file) {
-        std::cerr << "Failed to open file: " << filename << std::endl;
-        return ret;
-    }
+	std::cout << "Hashing: " << filename << std::endl;
+
+	if (!file) {
+		std::cerr << "Failed to open file: " << filename << std::endl;
+		return ret;
+	}
 
 	long total_hashed = 0;
     std::string buffer(piece_size, '\0');
@@ -154,9 +156,9 @@ std::string PieceHashFile(const std::string& filename, const int& piece_size, co
         buffer.resize(piece_size);
 		ShowProgressBar(const_cast<long&>(filesize), total_hashed);
     }
-    
-    file.close();
-    return ret;
+
+	file.close();
+	return ret;
 }
 
 
