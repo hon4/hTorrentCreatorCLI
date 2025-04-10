@@ -4,6 +4,7 @@
 #include <any>
 #include <vector>
 #include <fstream>
+#include <cstring>
 
 #include "inc/honSHA1.h"
 #include "inc/BEncode/BEncode.h"
@@ -25,6 +26,9 @@ void show_help();
 void show_ver();
 int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path, const std::vector<std::string>& trackers, const int& piece_size_user);
 std::string PieceHashFile(const std::string& filename, const int& piece_size, const long& filesize);
+std::string PieceHashFolder(const std::string& input_path, const std::vector<std::string>& filelist, const int& piece_size);
+std::string PieceHashFile4Folder(const std::string& filename, const int& piece_size, std::string& remain);
+
 
 int main(int argc, char *argv[]){
 	if(argc==1){
@@ -134,10 +138,11 @@ int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_
 	map<string, any> info_dict;
 	string fname=GetFileName(input_path);
 
+	vector<string> files;
 	if(!isDIR(input_path)){
 		info_dict["length"]=filesize;
 	}else{
-		vector<string> files=ListFiles(const_cast<string&>(input_path));
+		files=ListFiles(const_cast<string&>(input_path));
 		string prefix_path=NormalizePath(input_path);
 		vector<any> file_lst;
 		for (string tfile : files) {
@@ -150,7 +155,11 @@ int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_
 	}
 	info_dict["name"]=fname;
 	info_dict["piece length"]=piece_size;
-	info_dict["pieces"]=PieceHashFile(input_path, piece_size, filesize);
+	if(!isDIR(input_path)){
+		info_dict["pieces"]=PieceHashFile(input_path, piece_size, filesize);
+	}else{
+		info_dict["pieces"]=PieceHashFolder(NormalizePath(input_path), files, piece_size);
+	}
 	if(priv){
 		info_dict["private"]=1;
 	}
@@ -166,6 +175,52 @@ int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_
 	WriteFile(out_path,BEnc.Encode(dict));
 	cout << endl << "Torrent File successfully created." << endl;
 	return 0;
+}
+
+std::string PieceHashFolder(const std::string& input_path, const std::vector<std::string>& filelist, const int& piece_size){
+	std::string ret;
+	std::string remain;
+
+	for (string tfile : filelist) {
+		std::string filename=input_path+tfile;
+		ret+=PieceHashFile4Folder(filename, piece_size, remain);
+	}
+
+	if(!remain.empty()){
+		ret+=honSHA1(remain);
+	}
+
+	return ret;
+}
+
+std::string PieceHashFile4Folder(const std::string& filename, const int& piece_size, std::string& remain){
+	std::string ret;
+    std::ifstream file(filename, std::ios::binary);
+	std::cout << "Hashing: " << filename << std::endl;
+
+	if (!file) {
+		std::cerr << "Failed to open file: " << filename << std::endl;
+		return ret;
+	}
+
+    std::string buffer(piece_size, '\0');
+	std::memcpy(&buffer[0], remain.data(), remain.size());
+	std::cout << "dbg" << std::endl;
+    while (file.read(&buffer[remain.size()], piece_size-remain.size()) || file.gcount() > 0) {
+		buffer.resize(remain.size()+file.gcount());
+        if(buffer.size()==piece_size){
+        	ret += honSHA1(buffer);
+			remain="";
+		}else{
+			buffer.resize(file.gcount());
+			remain+=buffer;
+			std::cout << "I am executed! " << file.gcount() << " -- " << piece_size << " -- " << remain.size() << endl;
+		}
+		buffer.resize(piece_size);
+    }
+
+	file.close();
+	return ret;
 }
 
 std::string PieceHashFile(const std::string& filename, const int& piece_size, const long& filesize) {
