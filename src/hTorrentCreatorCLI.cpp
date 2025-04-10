@@ -15,6 +15,8 @@
 #include "inc/GetPieceSize.h"
 #include "inc/StringSplit.h"
 #include "inc/ProgressBar.h"
+#include "inc/ListFiles.h"
+#include "inc/NormalizePath.h"
 using namespace std;
 
 string hTorrentCreatorCLI_ver = "0.0.1";
@@ -134,6 +136,17 @@ int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_
 
 	if(!isDIR(input_path)){
 		info_dict["length"]=filesize;
+	}else{
+		vector<string> files=ListFiles(const_cast<string&>(input_path));
+		string prefix_path=NormalizePath(input_path);
+		vector<any> file_lst;
+		for (string tfile : files) {
+			map<string, any> tmp;
+			tmp["length"]=GetFileSize(NormalizePath(input_path)+tfile);
+			tmp["path"]=StringSplit(tfile, '/');
+			file_lst.push_back(tmp);
+		}
+		info_dict["files"]=file_lst;
 	}
 	info_dict["name"]=fname;
 	info_dict["piece length"]=piece_size;
