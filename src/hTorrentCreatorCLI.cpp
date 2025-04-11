@@ -205,7 +205,6 @@ std::string PieceHashFile4Folder(const std::string& filename, const int& piece_s
 
     std::string buffer(piece_size, '\0');
 	std::memcpy(&buffer[0], remain.data(), remain.size());
-	std::cout << "dbg" << std::endl;
     while (file.read(&buffer[remain.size()], piece_size-remain.size()) || file.gcount() > 0) {
 		buffer.resize(remain.size()+file.gcount());
         if(buffer.size()==piece_size){
@@ -214,7 +213,6 @@ std::string PieceHashFile4Folder(const std::string& filename, const int& piece_s
 		}else{
 			buffer.resize(file.gcount());
 			remain+=buffer;
-			std::cout << "I am executed! " << file.gcount() << " -- " << piece_size << " -- " << remain.size() << endl;
 		}
 		buffer.resize(piece_size);
     }
