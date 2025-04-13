@@ -11,3 +11,9 @@ cd hTorrentCreatorCLI-0.0.1
 make
 make install
 ```
+
+## For Windows
+Download hTorrentCreator from
+https://hcreatetorrent.sourceforge.io/
+or
+https://sourceforge.net/projects/hcreatetorrent/
