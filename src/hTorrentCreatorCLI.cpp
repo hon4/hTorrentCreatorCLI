@@ -5,6 +5,7 @@
 #include <vector>
 #include <fstream>
 #include <cstring>
+#include <cstdint>
 
 #include "inc/honSHA1.h"
 #include "inc/BEncode/BEncode.h"
@@ -20,14 +21,14 @@
 #include "inc/NormalizePath.h"
 using namespace std;
 
-string hTorrentCreatorCLI_ver = "0.0.1";
+string hTorrentCreatorCLI_ver = "0.0.2";
 
 void show_help();
 void show_ver();
-int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path, const std::vector<std::string>& trackers, const int& piece_size_user);
-std::string PieceHashFile(const std::string& filename, const int& piece_size, const long& filesize);
-std::string PieceHashFolder(const std::string& input_path, const std::vector<std::string>& filelist, const int& piece_size);
-std::string PieceHashFile4Folder(const std::string& filename, const int& piece_size, std::string& remain);
+int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path, const std::vector<std::string>& trackers, const uint32_t& piece_size_user);
+std::string PieceHashFile(const std::string& filename, const uint32_t& piece_size, const long& filesize);
+std::string PieceHashFolder(const std::string& input_path, const std::vector<std::string>& filelist, const uint32_t& piece_size);
+std::string PieceHashFile4Folder(const std::string& filename, const uint32_t& piece_size, std::string& remain);
 
 
 int main(int argc, char *argv[]){
@@ -40,7 +41,7 @@ int main(int argc, char *argv[]){
 	bool priv=false;
 	string out_path;
 	vector<string> trackers;
-	int piece_size;
+	uint32_t piece_size;
 
 	for(int i=1; i<argc; i++){
 		if(!strcmp(argv[i],"-h")){
@@ -95,7 +96,7 @@ int main(int argc, char *argv[]){
 	return 0;
 }
 
-int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path, const std::vector<std::string>& trackers, const int& piece_size_user){
+int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path, const std::vector<std::string>& trackers, const uint32_t& piece_size_user){
 	if(input_path.empty()){
 		std::cout << "hTorrentCreatorCLI: No input file specified.\n";
 		return 0;
@@ -128,7 +129,7 @@ int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_
 	dict["created by"]="hTorrentCLI "+hTorrentCreatorCLI_ver;
 	dict["creation date"]=GetUnixTimestamp();
 	long filesize = GetFileSize(input_path);
-	int piece_size;
+	uint32_t piece_size;
 	if(piece_size_user==0){
 		piece_size = GetPieceSize(filesize);
 	}else{
@@ -177,7 +178,7 @@ int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_
 	return 0;
 }
 
-std::string PieceHashFolder(const std::string& input_path, const std::vector<std::string>& filelist, const int& piece_size){
+std::string PieceHashFolder(const std::string& input_path, const std::vector<std::string>& filelist, const uint32_t& piece_size){
 	std::string ret;
 	std::string remain;
 
@@ -193,7 +194,7 @@ std::string PieceHashFolder(const std::string& input_path, const std::vector<std
 	return ret;
 }
 
-std::string PieceHashFile4Folder(const std::string& filename, const int& piece_size, std::string& remain){
+std::string PieceHashFile4Folder(const std::string& filename, const uint32_t& piece_size, std::string& remain){
 	std::string ret;
     std::ifstream file(filename, std::ios::binary);
 	std::cout << "Hashing: " << filename << std::endl;
@@ -221,7 +222,7 @@ std::string PieceHashFile4Folder(const std::string& filename, const int& piece_s
 	return ret;
 }
 
-std::string PieceHashFile(const std::string& filename, const int& piece_size, const long& filesize) {
+std::string PieceHashFile(const std::string& filename, const uint32_t& piece_size, const long& filesize) {
     std::string ret;
     std::ifstream file(filename, std::ios::binary);
 	std::cout << "Hashing: " << filename << std::endl;
