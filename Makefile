@@ -18,6 +18,7 @@ install: $(OUTPUT)
 	mkdir -p $(BINDIR)
 	cp hTorrentCreator $(BINDIR)
 	ln -snf $(BINDIR)/hTorrentCreator $(BINDIR)/htc
+	ln -snf $(BINDIR)/hTorrentCreator $(BINDIR)/htorrentcreator
 
 uninstall: $(OUTPUT)
 	rm -f $(BINDIR)/hTorrentCreator
