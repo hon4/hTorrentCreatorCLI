@@ -1,6 +1,7 @@
 #include <iostream>
+#include <cstdint>
 
-void ShowProgressBar(long& total, long& cmpl){
+void ShowProgressBar(uint64_t& total, uint64_t& cmpl){
     int fill = 32 * cmpl / total;
     std::cout << "\r[";
     for (int i = 0; i < fill; i++) {
