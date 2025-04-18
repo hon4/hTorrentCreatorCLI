@@ -26,7 +26,7 @@ string hTorrentCreatorCLI_ver = "0.0.2";
 void show_help();
 void show_ver();
 int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path, const std::vector<std::string>& trackers, const uint32_t& piece_size_user);
-std::string PieceHashFile(const std::string& filename, const uint32_t& piece_size, const long& filesize);
+std::string PieceHashFile(const std::string& filename, const uint32_t& piece_size, const uint64_t& filesize);
 std::string PieceHashFolder(const std::string& input_path, const std::vector<std::string>& filelist, const uint32_t& piece_size);
 std::string PieceHashFile4Folder(const std::string& filename, const uint32_t& piece_size, std::string& remain);
 
@@ -92,7 +92,7 @@ int main(int argc, char *argv[]){
 	}
 
 	mkTorrent(input_path, priv, out_path, trackers, piece_size);
-	
+
 	return 0;
 }
 
@@ -128,7 +128,7 @@ int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_
 
 	dict["created by"]="hTorrentCLI "+hTorrentCreatorCLI_ver;
 	dict["creation date"]=GetUnixTimestamp();
-	long filesize = GetFileSize(input_path);
+	uint64_t filesize = GetFileSize(input_path);
 	uint32_t piece_size;
 	if(piece_size_user==0){
 		piece_size = GetPieceSize(filesize);
@@ -222,7 +222,7 @@ std::string PieceHashFile4Folder(const std::string& filename, const uint32_t& pi
 	return ret;
 }
 
-std::string PieceHashFile(const std::string& filename, const uint32_t& piece_size, const long& filesize) {
+std::string PieceHashFile(const std::string& filename, const uint32_t& piece_size, const uint64_t& filesize) {
     std::string ret;
     std::ifstream file(filename, std::ios::binary);
 	std::cout << "Hashing: " << filename << std::endl;
@@ -232,14 +232,14 @@ std::string PieceHashFile(const std::string& filename, const uint32_t& piece_siz
 		return ret;
 	}
 
-	long total_hashed = 0;
+	uint64_t total_hashed = 0;
     std::string buffer(piece_size, '\0');
     while (file.read(&buffer[0], piece_size) || file.gcount() > 0) {
         buffer.resize(file.gcount());
 		total_hashed += file.gcount();
         ret += honSHA1(buffer);
         buffer.resize(piece_size);
-		ShowProgressBar(const_cast<long&>(filesize), total_hashed);
+		ShowProgressBar(const_cast<uint64_t&>(filesize), total_hashed);
     }
 
 	file.close();
