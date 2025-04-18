@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdint>
 
-std::uint32_t GetPieceSize(long& size){
+std::uint32_t GetPieceSize(uint64_t& size){
     if((size / 16386) < 0){ //16 KiB
         return 16384;
     }else if((size / 32768) < 0){ //32 KiB
