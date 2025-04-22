@@ -223,8 +223,8 @@ std::string PieceHashFile4Folder(const std::string& filename, const uint32_t& pi
 }
 
 std::string PieceHashFile(const std::string& filename, const uint32_t& piece_size, const uint64_t& filesize) {
-    std::string ret;
-    std::ifstream file(filename, std::ios::binary);
+	std::string ret;
+	std::ifstream file(filename, std::ios::binary);
 	std::cout << "Hashing: " << filename << std::endl;
 
 	if (!file) {
@@ -233,14 +233,14 @@ std::string PieceHashFile(const std::string& filename, const uint32_t& piece_siz
 	}
 
 	uint64_t total_hashed = 0;
-    std::string buffer(piece_size, '\0');
-    while (file.read(&buffer[0], piece_size) || file.gcount() > 0) {
-        buffer.resize(file.gcount());
+	std::string buffer(piece_size, '\0');
+	while (file.read(&buffer[0], piece_size) || file.gcount() > 0) {
+		buffer.resize(file.gcount());
 		total_hashed += file.gcount();
-        ret += honSHA1(buffer);
-        buffer.resize(piece_size);
+		ret += honSHA1(buffer);
+		buffer.resize(piece_size);
 		ShowProgressBar(const_cast<uint64_t&>(filesize), total_hashed);
-    }
+	}
 
 	file.close();
 	return ret;
