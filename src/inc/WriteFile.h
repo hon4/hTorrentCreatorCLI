@@ -3,16 +3,16 @@
 #include <string>
 
 bool WriteFile(const std::string& filename, const std::string& content) {
-    std::ofstream outFile(filename);
+	std::ofstream outFile(filename);
 
-    if (!outFile.is_open()) {
-        std::cerr << "Error: Could not open file '" << filename << "' for writing\n";
-        return false;
-    }
+	if (!outFile.is_open()) {
+		std::cerr << "Error: Could not open file '" << filename << "' for writing\n";
+		return false;
+	}
 
-    outFile << content;
+	outFile << content;
 
-    outFile.close();
+	outFile.close();
 
-    return true;
+	return true;
 }
