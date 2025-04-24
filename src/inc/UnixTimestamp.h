@@ -2,5 +2,5 @@
 #include <ctime>
 
 int GetUnixTimestamp() {
-    return static_cast<int>(std::time(NULL));
+	return static_cast<int>(std::time(NULL));
 }
