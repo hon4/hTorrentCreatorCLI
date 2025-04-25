@@ -6,7 +6,7 @@ BINDIR ?= /usr/local/bin
 all: $(OUTPUT)
 
 $(OUTPUT): $(SRC)
-	$(CC) $(SRC) -o $(OUTPUT) -lstdc++ -lcrypto
+	$(CC) $(SRC) -o $(OUTPUT) -lstdc++ -lcrypto -s
 
 clean:
 	rm -f $(OUTPUT)
