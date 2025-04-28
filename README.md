@@ -11,7 +11,7 @@ cd hTorrentCreatorCLI-0.0.1
 make
 make install
 ```
-Do NOT clone the main branch, use the releases. The main branch has changing code and may not work properly.
+Do ***NOT*** clone the main branch, use the releases. The main branch has changing code and may not work properly.
 
 ## For Windows
 Download hTorrentCreator from
