@@ -28,7 +28,7 @@ void show_ver();
 int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path, const std::vector<std::string>& trackers, const uint32_t& piece_size_user);
 std::string PieceHashFile(const std::string& filename, const uint32_t& piece_size, const uint64_t& filesize);
 std::string PieceHashFolder(const std::string& input_path, const std::vector<std::string>& filelist, const uint32_t& piece_size);
-std::string PieceHashFile4Folder(const std::string& filename, const uint32_t& piece_size, std::string& remain);
+std::string PieceHashFile4Folder(const std::string& filename, const uint32_t& piece_size, std::string& remain, const uint64_t& filesize);
 
 
 int main(int argc, char *argv[]){
@@ -184,7 +184,7 @@ std::string PieceHashFolder(const std::string& input_path, const std::vector<std
 
 	for (string tfile : filelist) {
 		std::string filename=input_path+tfile;
-		ret+=PieceHashFile4Folder(filename, piece_size, remain);
+		ret+=PieceHashFile4Folder(filename, piece_size, remain, GetFileSize(filename));
 	}
 
 	if(!remain.empty()){
@@ -194,27 +194,30 @@ std::string PieceHashFolder(const std::string& input_path, const std::vector<std
 	return ret;
 }
 
-std::string PieceHashFile4Folder(const std::string& filename, const uint32_t& piece_size, std::string& remain){
+std::string PieceHashFile4Folder(const std::string& filename, const uint32_t& piece_size, std::string& remain, const uint64_t& filesize){
 	std::string ret;
     std::ifstream file(filename, std::ios::binary);
-	std::cout << "Hashing: " << filename << std::endl;
+	std::cout << "\nHashing: " << filename << std::endl;
 
 	if (!file) {
 		std::cerr << "Failed to open file: " << filename << std::endl;
 		return ret;
 	}
 
+	uint64_t total_hashed = 0;
     std::string buffer(piece_size, '\0');
 	std::memcpy(&buffer[0], remain.data(), remain.size());
     while (file.read(&buffer[remain.size()], piece_size-remain.size()) || file.gcount() > 0) {
 		buffer.resize(remain.size()+file.gcount());
-        if(buffer.size()==piece_size){
+        total_hashed += file.gcount();
+		if(buffer.size()==piece_size){
         	ret += honSHA1(buffer);
 			remain="";
 		}else{
 			buffer.resize(file.gcount());
 			remain+=buffer;
 		}
+		ShowProgressBar(const_cast<uint64_t&>(filesize), total_hashed);
 		buffer.resize(piece_size);
     }
 
