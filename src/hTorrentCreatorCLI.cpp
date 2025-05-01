@@ -197,7 +197,7 @@ std::string PieceHashFolder(const std::string& input_path, const std::vector<std
 std::string PieceHashFile4Folder(const std::string& filename, const uint32_t& piece_size, std::string& remain, const uint64_t& filesize){
 	std::string ret;
     std::ifstream file(filename, std::ios::binary);
-	std::cout << "Hashing: " << filename << std::endl;
+	std::cout << "\nHashing: " << filename << std::endl;
 
 	if (!file) {
 		std::cerr << "Failed to open file: " << filename << std::endl;
