@@ -25,7 +25,7 @@ string hTorrentCreatorCLI_ver = "0.0.3";
 
 void show_help();
 void show_ver();
-int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path, const std::vector<std::string>& trackers, const uint32_t& piece_size_user);
+int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path, const std::vector<std::string>& trackers, const uint32_t& piece_size_user, const std::vector<std::any>& webseeds);
 std::string PieceHashFile(const std::string& filename, const uint32_t& piece_size, const uint64_t& filesize);
 std::string PieceHashFolder(const std::string& input_path, const std::vector<std::string>& filelist, const uint32_t& piece_size);
 std::string PieceHashFile4Folder(const std::string& filename, const uint32_t& piece_size, std::string& remain, const uint64_t& filesize);
@@ -42,7 +42,7 @@ int main(int argc, char *argv[]){
 	string out_path;
 	vector<string> trackers;
 	uint32_t piece_size;
-	vector<string> webseeds;
+	vector<any> webseeds;
 
 	for(int i=1; i<argc; i++){
 		if(!strcmp(argv[i],"-h")){
@@ -72,7 +72,7 @@ int main(int argc, char *argv[]){
 		}else if(!strcmp(argv[i],"-t")){
 			i++;
 			if(argc>i){
-				trackers.push_back(argv[i]);
+				trackers.push_back(std::string(argv[i]));
 			}else{
 				printf("hTorrentCreatorCLI: Error: -t is used but no tracker url specified.\n");
 				return 0;
@@ -92,7 +92,7 @@ int main(int argc, char *argv[]){
 		}else if(!strcmp(argv[i],"-w")){
 			i++;
 			if(argc>i){
-				webseeds.push_back(argv[i]);
+				webseeds.push_back(std::string(argv[i]));
 			}else{
 				printf("hTorrentCreatorCLI: Error: -w is used but no tracker url specified.\n");
 				return 0;
@@ -100,12 +100,12 @@ int main(int argc, char *argv[]){
 		}
 	}
 
-	mkTorrent(input_path, priv, out_path, trackers, piece_size);
+	mkTorrent(input_path, priv, out_path, trackers, piece_size, webseeds);
 
 	return 0;
 }
 
-int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path, const std::vector<std::string>& trackers, const uint32_t& piece_size_user){
+int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path, const std::vector<std::string>& trackers, const uint32_t& piece_size_user, const std::vector<std::any>& webseeds){
 	if(input_path.empty()){
 		std::cout << "hTorrentCreatorCLI: No input file specified.\n";
 		return 0;
@@ -175,6 +175,11 @@ int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_
 	}
 
 	dict["info"]=std::any(info_dict);
+
+	//WebSeeds
+	if(!webseeds.empty()){
+		dict["url-list"]=webseeds;
+	}
 
 	BEncode BEnc;
 
