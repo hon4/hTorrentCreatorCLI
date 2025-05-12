@@ -42,6 +42,7 @@ int main(int argc, char *argv[]){
 	string out_path;
 	vector<string> trackers;
 	uint32_t piece_size;
+	vector<string> webseeds;
 
 	for(int i=1; i<argc; i++){
 		if(!strcmp(argv[i],"-h")){
@@ -86,6 +87,14 @@ int main(int argc, char *argv[]){
 				}
 			}else{
 				printf("hTorrentCreatorCLI: Error: -s is used but no piece size specified.\n");
+				return 0;
+			}
+		}else if(!strcmp(argv[i],"-w")){
+			i++;
+			if(argc>i){
+				webseeds.push_back(argv[i]);
+			}else{
+				printf("hTorrentCreatorCLI: Error: -w is used but no tracker url specified.\n");
 				return 0;
 			}
 		}
@@ -251,7 +260,7 @@ std::string PieceHashFile(const std::string& filename, const uint32_t& piece_siz
 
 
 void show_help(){
-	printf("\nhTorrentCreatorCLI %s\n==========================\n-v         Show version info and exit.\n-h         Show this menu and exit.\n-i <path>  Select input path.\n-p         Set private flag to torrent.\n-o <path>  Select output file.\n-t <url>   Add tracker announce url. (can be used multiple times)\n-s <size>  Set piece size in bytes. (calculated automatically if unset)\n\n",hTorrentCreatorCLI_ver.c_str());
+	printf("\nhTorrentCreatorCLI %s\n==========================\n-v         Show version info and exit.\n-h         Show this menu and exit.\n-i <path>  Select input path.\n-p         Set private flag to torrent.\n-o <path>  Select output file.\n-t <url>   Add tracker announce url. (can be used multiple times)\n-s <size>  Set piece size in bytes. (calculated automatically if unset)\n-w <url>   Add WebSeed url. (can be used multiple times)\n\n",hTorrentCreatorCLI_ver.c_str());
 }
 
 void show_ver(){
