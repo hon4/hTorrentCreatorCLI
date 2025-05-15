@@ -21,7 +21,7 @@
 #include "inc/NormalizePath.h"
 using namespace std;
 
-string hTorrentCreatorCLI_ver = "0.0.3";
+string hTorrentCreatorCLI_ver = "0.0.4";
 
 void show_help();
 void show_ver();
