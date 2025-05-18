@@ -187,7 +187,7 @@ int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_
 	}
 
 	if(WriteFile(out_path,BEnc.Encode(dict))){
-		cout << "Torrent File successfully created." << endl;
+		cout << "Torrent File successfully created.\n";
 	}else{
 		return 1;
 	}
