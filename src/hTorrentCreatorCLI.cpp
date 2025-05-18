@@ -168,6 +168,7 @@ int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_
 	}else{
 		info_dict["pieces"]=PieceHashFolder(NormalizePath(input_path), files, piece_size);
 	}
+	cout << "\n"; //for newline after progress bar(s)
 	if(priv){
 		info_dict["private"]=1;
 	}
@@ -186,7 +187,7 @@ int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_
 	}
 
 	if(WriteFile(out_path,BEnc.Encode(dict))){
-		cout << endl << "Torrent File successfully created." << endl;
+		cout << "Torrent File successfully created." << endl;
 	}else{
 		return 1;
 	}
