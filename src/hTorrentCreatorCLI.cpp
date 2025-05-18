@@ -100,9 +100,7 @@ int main(int argc, char *argv[]){
 		}
 	}
 
-	mkTorrent(input_path, priv, out_path, trackers, piece_size, webseeds);
-
-	return 0;
+	return mkTorrent(input_path, priv, out_path, trackers, piece_size, webseeds);
 }
 
 int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path, const std::vector<std::string>& trackers, const uint32_t& piece_size_user, const std::vector<std::any>& webseeds){
