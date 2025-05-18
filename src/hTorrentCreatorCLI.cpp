@@ -185,8 +185,11 @@ int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_
 		out_path=fname+".torrent";
 	}
 
-	WriteFile(out_path,BEnc.Encode(dict));
-	cout << endl << "Torrent File successfully created." << endl;
+	if(WriteFile(out_path,BEnc.Encode(dict))){
+		cout << endl << "Torrent File successfully created." << endl;
+	}else{
+		return 1;
+	}
 	return 0;
 }
 
