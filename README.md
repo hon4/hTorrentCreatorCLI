@@ -13,6 +13,21 @@ make install
 ```
 Do ***NOT*** clone the main branch, use the [releases](https://github.com/hon4/hTorrentCreatorCLI/releases). The main branch has changing code and may not work properly.
 
+## Features
+| Feature             | Support |
+|---------------------|---------|
+| Single File Torrent | Yes     |
+| Multi-File Torrent  | Yes     |
+| Private Torrent     | Yes     |
+| Custom output file  | Yes     |
+| Custom output path  | Yes     |
+| Single Tracker      | Yes     |
+| Multiple Trackers   | Yes     |
+| Tracker Groups      | Yes     |
+| Auto Piece Size     | Yes     |
+| Custom Piece Size   | Yes     |
+| WebSeeds            | Yes     |
+
 ## For Windows
 Download hTorrentCreator from
 https://hcreatetorrent.sourceforge.io/
