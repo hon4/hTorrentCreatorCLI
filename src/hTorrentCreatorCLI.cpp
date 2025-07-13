@@ -25,7 +25,7 @@ string hTorrentCreatorCLI_ver = "0.0.4";
 
 void show_help();
 void show_ver();
-int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path, const std::vector<std::string>& trackers, const uint32_t& piece_size_user, const std::vector<std::any>& webseeds);
+int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path, const std::vector<std::string>& trackers, const uint32_t& piece_size_user, const std::vector<std::any>& webseeds, const std::string& comment);
 std::string PieceHashFile(const std::string& filename, const uint32_t& piece_size, const uint64_t& filesize);
 std::string PieceHashFolder(const std::string& input_path, const std::vector<std::string>& filelist, const uint32_t& piece_size);
 std::string PieceHashFile4Folder(const std::string& filename, const uint32_t& piece_size, std::string& remain, const uint64_t& filesize);
@@ -43,6 +43,7 @@ int main(int argc, char *argv[]){
 	vector<string> trackers;
 	uint32_t piece_size;
 	vector<any> webseeds;
+	string comment;
 
 	for(int i=1; i<argc; i++){
 		if(!strcmp(argv[i],"-h")){
@@ -97,13 +98,21 @@ int main(int argc, char *argv[]){
 				printf("hTorrentCreatorCLI: Error: -w is used but no tracker url specified.\n");
 				return 0;
 			}
+		}else if(!strcmp(argv[i],"-c")){
+			i++;
+			if(argc>i){
+				comment=argv[i];
+			}else{
+				printf("hTorrentCreatorCLI: Error: -c is used but no comment specified.\n");
+				return 0;
+			}
 		}
 	}
 
-	return mkTorrent(input_path, priv, out_path, trackers, piece_size, webseeds);
+	return mkTorrent(input_path, priv, out_path, trackers, piece_size, webseeds, comment);
 }
 
-int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path, const std::vector<std::string>& trackers, const uint32_t& piece_size_user, const std::vector<std::any>& webseeds){
+int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_path, const std::vector<std::string>& trackers, const uint32_t& piece_size_user, const std::vector<std::any>& webseeds, const std::string& comment){
 	if(input_path.empty()){
 		std::cout << "hTorrentCreatorCLI: No input file specified.\n";
 		return 0;
@@ -131,6 +140,11 @@ int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_
 			}
 			dict["announce-list"]=announce_list;
 		}
+	}
+	
+	//Comment
+	if(!comment.empty()){
+		dict["comment"]=comment;
 	}
 
 	dict["created by"]="hTorrentCLI "+hTorrentCreatorCLI_ver;
@@ -267,7 +281,7 @@ std::string PieceHashFile(const std::string& filename, const uint32_t& piece_siz
 
 
 void show_help(){
-	printf("\nhTorrentCreatorCLI %s\n==========================\n-v         Show version info and exit.\n-h         Show this menu and exit.\n-i <path>  Select input path.\n-p         Set private flag to torrent.\n-o <path>  Select output file.\n-t <url>   Add tracker announce url. (can be used multiple times)\n-s <size>  Set piece size in bytes. (calculated automatically if unset)\n-w <url>   Add WebSeed url. (can be used multiple times)\n\n",hTorrentCreatorCLI_ver.c_str());
+	printf("\nhTorrentCreatorCLI %s\n==========================\n-v         Show version info and exit.\n-h         Show this menu and exit.\n-i <path>  Select input path.\n-p         Set private flag to torrent.\n-o <path>  Select output file.\n-t <url>   Add tracker announce url. (can be used multiple times)\n-s <size>  Set piece size in bytes. (calculated automatically if unset)\n-w <url>   Add WebSeed url. (can be used multiple times)\n-c <text>  Add comment in torrent file.\n\n",hTorrentCreatorCLI_ver.c_str());
 }
 
 void show_ver(){
