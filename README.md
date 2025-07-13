@@ -27,6 +27,7 @@ Do ***NOT*** clone the main branch, use the [releases](https://github.com/hon4/h
 | Auto Piece Size     | Yes     |
 | Custom Piece Size   | Yes     |
 | WebSeeds            | Yes     |
+| Comments            | Yes     |
 
 ## For Windows
 Download hTorrentCreator from
