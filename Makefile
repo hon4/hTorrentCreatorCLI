@@ -16,10 +16,11 @@ run: $(OUTPUT)
 
 install: $(OUTPUT)
 	mkdir -p $(BINDIR)
-	cp hTorrentCreator $(BINDIR)
-	ln -snf $(BINDIR)/hTorrentCreator $(BINDIR)/htc
-	ln -snf $(BINDIR)/hTorrentCreator $(BINDIR)/htorrentcreator
+	cp $(OUTPUT) $(BINDIR)
+	ln -snf $(BINDIR)/$(OUTPUT) $(BINDIR)/htc
+	ln -snf $(BINDIR)/$(OUTPUT) $(BINDIR)/htorrentcreator
 
 uninstall: $(OUTPUT)
-	rm -f $(BINDIR)/hTorrentCreator
+	rm -f $(BINDIR)/$(OUTPUT)
 	rm -f $(BINDIR)/htc
+	rm -f $(BINDIR)/htorrentcreator
