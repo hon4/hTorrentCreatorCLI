@@ -1,13 +1,13 @@
 # hTorrentCreatorCLI
 An open source, easy to use and fast C++ command line torrent creator.
 
-### Latest Version: <ins>0.0.5</ins>
+### Latest Version: <ins>0.0.6</ins>
 
 ## How to install?
 ```
-wget https://github.com/hon4/hTorrentCreatorCLI/releases/download/v0.0.5/hTorrentCreatorCLI-0.0.5.tar.gz
-tar -xf hTorrentCreatorCLI-0.0.5.tar.gz
-cd hTorrentCreatorCLI-0.0.5
+wget https://github.com/hon4/hTorrentCreatorCLI/releases/download/v0.0.6/hTorrentCreatorCLI-0.0.6.tar.gz
+tar -xf hTorrentCreatorCLI-0.0.6.tar.gz
+cd hTorrentCreatorCLI-0.0.6
 make
 make install
 ```
