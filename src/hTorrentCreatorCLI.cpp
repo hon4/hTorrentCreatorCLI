@@ -106,6 +106,8 @@ int main(int argc, char *argv[]){
 				printf("hTorrentCreatorCLI: Error: -c is used but no comment specified.\n");
 				return 0;
 			}
+		}else{
+			printf("Warning: Unrecognized command \"%s\"\n",argv[i]);
 		}
 	}
 
