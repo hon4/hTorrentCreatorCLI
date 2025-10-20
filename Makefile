@@ -20,7 +20,7 @@ install: $(OUTPUT)
 	ln -snf $(OUTPUT) $(BINDIR)/htc
 	ln -snf $(OUTPUT) $(BINDIR)/htorrentcreator
 
-uninstall: $(OUTPUT)
+uninstall:
 	rm -f $(BINDIR)/$(OUTPUT)
 	rm -f $(BINDIR)/htc
 	rm -f $(BINDIR)/htorrentcreator
