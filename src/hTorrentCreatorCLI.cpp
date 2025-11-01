@@ -143,7 +143,7 @@ int mkTorrent(const std::string& input_path, const bool& priv, std::string& out_
 			dict["announce-list"]=announce_list;
 		}
 	}
-	
+
 	//Comment
 	if(!comment.empty()){
 		dict["comment"]=comment;
@@ -287,5 +287,5 @@ void show_help(){
 }
 
 void show_ver(){
-	printf("\nhTorrentCreatorCLI %s\n==========================\nCoded by: hon\nLanguage: c++\n\n",hTorrentCreatorCLI_ver.c_str());
+	printf("\nhTorrentCreatorCLI %s\n==========================\nCoded by: hon\nLanguage: c++\nSHA1 Lib: OpenSSL SHA1\n\n",hTorrentCreatorCLI_ver.c_str());
 }
