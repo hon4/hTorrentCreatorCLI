@@ -228,7 +228,7 @@ std::string PieceHashFolder(const std::string& input_path, const std::vector<std
 
 std::string PieceHashFile4Folder(const std::string& filename, const uint32_t& piece_size, std::string& remain, const uint64_t& filesize){
 	std::string ret;
-    std::ifstream file(filename, std::ios::binary);
+	std::ifstream file(filename, std::ios::binary);
 	std::cout << "\nHashing: " << filename << std::endl;
 
 	if (!file) {
@@ -237,23 +237,27 @@ std::string PieceHashFile4Folder(const std::string& filename, const uint32_t& pi
 	}
 
 	uint64_t total_hashed = 0;
-    std::string buffer(piece_size, '\0');
+	std::string buffer(piece_size, '\0');
 	std::memcpy(&buffer[0], remain.data(), remain.size());
-    while (file.read(&buffer[remain.size()], piece_size-remain.size()) || file.gcount() > 0) {
+	while (file.read(&buffer[remain.size()], piece_size-remain.size()) || file.gcount() > 0) {
 		buffer.resize(remain.size()+file.gcount());
-        total_hashed += file.gcount();
+		total_hashed += file.gcount();
 		if(buffer.size()==piece_size){
-        	ret += honSHA1(buffer);
+			ret += honSHA1(buffer);
 			remain="";
 		}else{
 			buffer.resize(file.gcount());
 			remain+=buffer;
 		}
+
 		ShowProgressBar(const_cast<uint64_t&>(filesize), total_hashed);
 		buffer.resize(piece_size);
-    }
+	}
 
 	file.close();
+	std::cout << "\u001B[A";
+	std::cout << "\n" << std::string(39, ' ');
+	std::cout << "\u001B[A";
 	return ret;
 }
 
